@@ -294,31 +294,35 @@ function Settings() {
                             </div>
 
                             {/* 自动检查更新 */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-900 dark:text-base-content mb-2">自动检查更新</label>
-                                <select
-                                    className="w-full px-4 py-4 border border-gray-200 dark:border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-base-content bg-gray-50 dark:bg-base-200"
-                                    value={formData.auto_check_update ? 'enabled' : 'disabled'}
-                                    onChange={async (e) => {
-                                        const enabled = e.target.value === 'enabled';
-                                        try {
-                                            await invoke('save_update_settings', {
-                                                settings: {
-                                                    auto_check: enabled,
-                                                    last_check_time: 0
-                                                }
-                                            });
-                                            setFormData({ ...formData, auto_check_update: enabled });
-                                            showToast(enabled ? '已启用自动检查更新' : '已禁用自动检查更新', 'success');
-                                        } catch (error) {
-                                            showToast(`${t('common.error')}: ${error}`, 'error');
-                                        }
-                                    }}
-                                >
-                                    <option value="disabled">禁用</option>
-                                    <option value="enabled">启用</option>
-                                </select>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">启动时自动检查新版本</p>
+                            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-base-200 rounded-lg border border-gray-100 dark:border-base-300">
+                                <div>
+                                    <div className="font-medium text-gray-900 dark:text-base-content">自动检查更新</div>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">启动时自动检查新版本</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={formData.auto_check_update ?? true}
+                                        onChange={async (e) => {
+                                            const enabled = e.target.checked;
+                                            try {
+                                                await invoke('save_update_settings', {
+                                                    settings: {
+                                                        auto_check: enabled,
+                                                        last_check_time: 0,
+                                                        check_interval_hours: formData.update_check_interval ?? 24
+                                                    }
+                                                });
+                                                setFormData({ ...formData, auto_check_update: enabled });
+                                                showToast(enabled ? '已启用自动检查更新' : '已禁用自动检查更新', 'success');
+                                            } catch (error) {
+                                                showToast(`${t('common.error')}: ${error}`, 'error');
+                                            }
+                                        }}
+                                    />
+                                    <div className="w-11 h-6 bg-gray-200 dark:bg-base-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                                </label>
                             </div>
 
                             {/* 检查间隔 */}
