@@ -196,6 +196,10 @@ print(response.choices[0].message.content)
             - **Unified Dialog Experience**: Replaced the native browser `window.confirm` for "Restore Default Configuration" with the app's themed `ModalDialog`.
             - **Icon & Badge Optimization**: Updated the restore button icon to `RotateCcw`, and streamlined status badge text with `whitespace-nowrap` to prevent layout breaks in tight spaces.
             - **Condensed Version Display**: Improved version extraction to display only pure numeric versions (e.g., v0.86.0) for a cleaner UI.
+        - **Claude Thinking Signature Persistence Fix (Fix Issue #752)**:
+            - **Root Cause**: Fixed a regression in v3.3.34 where the streaming response collector (`collector.rs`) missed the `signature` field of `thinking` blocks when processing `content_block_start` events, causing signature loss.
+            - **Fix Details**: Added logic to extract and persist the `signature` field in the collector, and added a unit test `test_collect_thinking_response_with_signature` to ensure correct signature propagation.
+            - **Impact**: Completely resolved the `Invalid signature in thinking block` error in v3.3.34, ensuring Thinking models work correctly in both streaming and non-streaming modes.
     *   **v3.3.34 (2026-01-16)**:
         - **OpenAI Codex/Responses Protocol Fix (Fix Issue #742)**:
             - **400 Invalid Argument Complete Fix**:

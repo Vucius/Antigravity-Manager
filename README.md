@@ -212,8 +212,12 @@ print(response.choices[0].message.content)
             - **多文件查阅体验**: 配置查看详情页升级为“标签页”模式，支持在一个弹窗内顺畅切换并查看该 CLI 关联的所有本地配置文件。
         - **UI/UX 深度细节优化**:
             - **弹窗体验统一**: 将“恢复默认配置”的确认框由原生浏览器弹窗替换为应用主题一致的 `ModalDialog`。
-            - **图标与显示优化**: 优化了恢复按钮图标 (RotateCcw)；精简了状态标签文案并强制不换行，彻底解决了高分屏或窄窗口下的布局错位问题。
+            - **图表与显示优化**: 优化了恢复按钮图标 (RotateCcw)；精简了状态标签文案并强制不换行，彻底解决了高分屏或窄窗口下的布局错位问题。
             - **版本号精简**: 改进了 CLI 版本号提取逻辑，界面仅保留纯数字版本（如 v0.86.0），视觉更加清爽。
+        - **Claude 思考签名持久化修复 (Fix Issue #752)**:
+            - **问题根源**: 修复了 v3.3.34 中的 regression，流式响应收集器 (`collector.rs`) 在处理 `content_block_start` 事件时遗漏了 `thinking` 块的 `signature` 字段，导致签名丢失。
+            - **修复内容**: 在收集器中添加了 `signature` 字段的提取和持久化逻辑，并补充了单元测试 `test_collect_thinking_response_with_signature` 确保签名正确传递。
+            - **影响范围**: 彻底解决了 v3.3.34 中出现的 `Invalid signature in thinking block` 错误，确保 Thinking 模型在流式和非流式模式下均能正常工作。
     *   **v3.3.34 (2026-01-16)**:
         - **OpenAI Codex/Responses 协议修复 (Fix Issue #742)**:
             - **400 Invalid Argument 彻底修复**:
